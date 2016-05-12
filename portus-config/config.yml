@@ -1,0 +1,38 @@
+email:
+  from: "portus@example.com"
+  name: "Docker Registry"
+  reply_to: "no-reply@example.com"
+  smtp:
+    enabled: false
+    address: "docker.example.com"
+    port: 25,
+    user_name: "portus@example.com"
+    password: ""
+    domain: "example.com"
+gravatar:
+  enabled: true
+ldap:
+  enabled: false
+  hostname: "ldap.examle.com"
+  port: 389
+  method: "plain"
+  base: "OU=People,DC=ads,DC=example,DC=com"
+  filter: "(&(objectCategory=person)(objectClass=user))"
+  uid: "uid"
+  authentication:
+    enabled: true
+    bind_dn: ""
+    password: ""
+  guess_email:
+    enabled: false
+    attr: ""
+first_user_admin:
+  enabled: true
+signup:
+  enabled: false
+check_ssl_usage:
+  enabled: true
+jwt_expiration_time:
+  value: "5.minutes"
+machine_fqdn:
+  value: XXX-MACHINE_FQDN-XXX
