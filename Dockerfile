@@ -15,13 +15,15 @@ RUN git clone https://github.com/SUSE/Portus.git /portus
 COPY docker-entrypoint.sh /
 
 WORKDIR /portus
-COPY ssl.conf /portus/ssl.conf
 
-# Uncomment these lines and adjust settings to personalize portus install.
+# Uncomment these lines and adjust settings in the source repo files to personalize portus install.
 #COPY portus-config/config.yml /portus/config/config.yml
 #COPY portus-config/database.yml /portus/config/database.yml
 #COPY portus-config/secrets.yml /portus/config/secrets.yml
 
+# If you already have certificates including intermediate certs, create a certs folder and move both the key and certs.
+# Uncomment below lines that generate self singed ssl.
+COPY ssl.conf /portus/ssl.conf
 RUN mkdir certs && openssl req -config ssl.conf \
 -new -x509 -nodes -sha256 -days 365 -newkey rsa:4096 \
 -keyout certs/domain.key -out certs/domain.crt
@@ -35,7 +37,7 @@ COPY apache-config/sysconfig_apache2 /etc/sysconfig/apache2
 COPY apache-config/httpd.conf /etc/apache2/httpd.conf
 COPY apache-config/portus.conf /etc/apache2/sites-available/000-ssl.conf
 COPY apache-config/000-default.conf /etc/apache2/sites-available/000-default.conf
-RUN a2enmod rewrite && a2enmod ssl && a2ensite 000-ssl.conf
+RUN a2enmod rewrite && a2enmod ssl && a2enmod headers && a2enmod proxy && a2ensite 000-ssl.conf
 EXPOSE 80 443
 
 ENTRYPOINT ["/docker-entrypoint.sh"]
